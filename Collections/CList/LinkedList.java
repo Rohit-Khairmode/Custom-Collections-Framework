@@ -219,6 +219,56 @@ public class LinkedList<T> {
         assert temp != null;
         return temp.val;
     }
+    public boolean hasCycle() {
+        Node<T> fast = head;
+        Node<T> slow = head;
+        while(fast != null && fast.next != null)
+        {
+            fast = fast.next.next;
+            slow =slow.next;
+            if(fast == slow)
+                return true;
+        }
+        return false;
+    }
+    public int lengthOfCycle(){
+        Node<T> fast = this.head;
+        Node<T> slow = this.head;
+        while(fast != null && fast.next != null)
+        {
+            fast = fast.next.next;
+            slow= slow.next;
+            if(fast == slow)
+            {
+                int count=0;
+                do{
+                    slow=slow.next;
+                    count++;
+                }while (fast == slow);
+                return count;
+            }
+        }
+        return 0;
+    }
+    public T firstNodeInCycle() {
+        int length = lengthOfCycle();
+        if(length ==0)
+            return null;
+        Node<T> f= head;
+        Node<T> s= head;
+        while(length >0)
+        {
+            s=s.next;
+            length--;
+        }
+        while(f != s)
+        {
+            f=f.next;
+            s=s.next;
+        }
+        return f.val;
+    }
+
     @Override
     public String toString(){
         if(isEmpty())
