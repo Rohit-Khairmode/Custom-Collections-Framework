@@ -1,6 +1,6 @@
 package Collections.CList;
 
-public class LinkedList<T> {
+public class LinkedList<T>{
     private Node<T> head;
     private int size;
 
@@ -219,6 +219,20 @@ public class LinkedList<T> {
         assert temp != null;
         return temp.val;
     }
+    private Node getNode(int index)
+    {
+        Node<T> temp = head;
+        if(index <0 || index > size-1 )
+            throw new IndexOutOfBoundsException("Please enter the valid index");
+        int i =0;
+        while(i<index)
+        {
+            temp=temp == null ?null:temp.next;
+            i++;
+        }
+        assert temp != null;
+        return temp;
+    }
     public boolean hasCycle() {
         Node<T> fast = head;
         Node<T> slow = head;
@@ -268,7 +282,56 @@ public class LinkedList<T> {
         }
         return f.val;
     }
+    public void reverseByChunks(int k){
+        Node<T> ps=this.head;
+        int len = this.size();
+        while(len > k)
+        {
+            Node<T> c = ps == head ?head:ps.next;
+            Node<T> p =null;
+            Node<T> n = c.next;
+            for(int i=0;i<k;i++)
+            {
+                c.next=p;
+                p=c;
+                c=n;
+                n = n==null?null:n.next;
+            }
+            if(ps==head)p=head;
+            ps.next=c;
+            len -= k;
+            if(!(len < k))
+            {
+                while(k>1 && c != null)
+                {
+                    c=c.next;
+                    k--;
+                }
+                ps=c;
+            }
+            }
+        }
 
+    public void reverseRec(){
+        reverseRec(null,head,head.next);
+    }
+    private void  reverseRec(Node<T> pre,Node<T> first,Node<T> second)
+    {
+        if(first==null || first.next==null)
+        {
+            first.next = pre;
+            pre=first;
+            first = second;
+            second=second==null?null:second.next;
+            head=pre;
+            return;
+        }
+        first.next = pre;
+        pre=first;
+        first = second;
+        second=second==null?null:second.next;
+        reverseRec(pre,first,second);
+    }
     @Override
     public String toString(){
         if(isEmpty())
@@ -284,6 +347,7 @@ public class LinkedList<T> {
         }
         return "";
     }
+
     private static class Node<T>{
         private T val;
         private Node<T> next;
